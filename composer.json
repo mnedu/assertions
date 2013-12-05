@@ -1,0 +1,25 @@
+{
+    "name": "mstate/assertions",
+    "description": "A wrapper around the assertion library by beberlei (https://github.com/beberlei/assert)",
+    "minimum-stability": "stable",
+    "authors": [
+        {
+            "name": "Justin Rovang",
+            "email": "justin.rovang@minnesota.edu"
+        }
+    ],
+    
+    "require": {
+        "beberlei/assert": "1.6.*"
+    },
+    
+    "require-dev": {
+        "phpunit/phpunit": "3.7.*"
+    },
+
+    "autoload": {
+        "psr-0": {
+            "mstate\\assertions\\": "src/"
+        }
+    }
+}

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE project>
+<project name="M State - Assertions">
+
+	<target name="clean">
+		<delete dir="${basedir}/build/"/>
+	</target>
+
+	<target name="prepare">
+		<mkdir dir="${basedir}/build" />
+		<mkdir dir="${basedir}/build/logs"/>
+		<mkdir dir="${basedir}/build/tests"/>
+		<mkdir dir="${basedir}/build/docs"/>
+		<mkdir dir="${basedir}/build/charts"/>
+		<mkdir dir="${basedir}/build/unittests"/>
+	</target>
+
+	<target name="composer">
+
+		<exec executable="composer.phar" failonerror="true" dir="src/">
+			<arg value="update" />
+		</exec>
+	</target>
+
+	<target name="phplint">
+		<apply executable="php" failonerror="true">
+			<arg value="-l" />
+			<fileset dir="${basedir}/src">
+				<filename name="**/*.php" />
+			</fileset>
+		</apply>
+	</target>
+
+	<target name="phpcpd">
+		<exec
+				executable="phpcpd"
+				failonerror="false">
+			<arg line="--log-pmd ${basedir}/build/logs/cpd.xml
+                --exclude src/scripts
+                --exclude src/vendor
+                --exclude src/tests src"/>
+		</exec>
+	</target>
+
+	<target name="phpmd">
+		<exec
+				executable="phpmd"
+				failonerror="false">
+			<arg line="src 
+				--reportfile ${basedir}/build/logs/pmd.xml
+				--exclude src/tests,src/scripts,src/vendor
+				xml 
+				codesize,unusedcode,design"/>
+		</exec>
+	</target>
+
+	<target name="pdepend">
+		<exec
+				executable="pdepend"
+				failonerror="false">
+			<arg line="--jdepend-xml=${basedir}/build/logs/jdepend.xml
+				--jdepend-chart=${basedir}/build/charts/ai.svg
+				--overview-pyramid=${basedir}/build/charts/overview-pyramid.svg
+				--ignore=src/vendor,src/scripts,src/tests
+				src"/>
+		</exec>
+	</target>
+
+	<target name="phpcs-generate">
+		<exec
+				executable="phpcs"
+				output="${basedir}/build/logs/checkstyle-result.xml"
+				failonerror="false"
+				resultproperty="PHPCS_EXIT_CODE">
+			<arg line="--report=checkstyle --tab-width=4 -n --standard=MState src"/>
+		</exec>
+
+	</target>
+
+	<target name="phpcs" depends="phpcs-generate">
+		<fail message="Coding standards are not followed">
+			<condition>
+				<not>
+					<equals arg1="${PHPCS_EXIT_CODE}" arg2="0" />
+				</not>
+			</condition>
+		</fail>
+
+	</target>
+
+	<target name="phpunit">
+		<exec executable="phpunit" failonerror="true" dir="src/">
+			<arg line="--log-junit ${basedir}/build/logs/phpunit.xml
+				--coverage-html ${basedir}/build/tests"/>
+		</exec>
+	</target>
+
+	<target name="build" depends="clean, prepare, phplint, phpunit, phpcs-generate, phpcpd, pdepend, composer"/>
+
+</project>

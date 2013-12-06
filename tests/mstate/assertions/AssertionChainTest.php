@@ -4,13 +4,17 @@ use mstate\assertions\AssertionChain;
 
 class AssertionChainTest extends PHPUnit_Framework_TestCase {
 	
-	/**
-	 * @expectedException \Exception
-	 */
-	public function testNonScalar() {
-		new AssertionChain(new DateTime());
+	public function testFactory() {
+		
+		$inst = AssertionChain::factory('zed');
+		
+		$this->assertInstanceOf(
+			AssertionChain::class,
+			$inst
+		);
+		
 	}
-
+	
 	/**
 	 * @expectedException \BadMethodCallException
 	 */

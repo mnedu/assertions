@@ -120,5 +120,3 @@ class AssertionChain implements ValidatableInterface {
 		return $this;
 	}
 }
-
-?> 

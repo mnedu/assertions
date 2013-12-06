@@ -72,4 +72,3 @@ class AssertionList implements ValidatableInterface {
 		return $this->chains;
 	}
 }
-?>

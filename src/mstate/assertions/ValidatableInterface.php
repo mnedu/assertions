@@ -18,4 +18,3 @@ interface ValidatableInterface {
 	 */
 	public function validationErrors();
 }
-?>

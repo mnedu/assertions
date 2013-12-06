@@ -60,21 +60,26 @@ class AssertionChain implements ValidatableInterface {
 	protected $violations = [];
 
 	/**
-	 * @param mixed $value A scalar value to evaluate
+	 * @param mixed $value A value to evaluate
 	 *
 	 * @throws \Exception If the value is non-scalar
 	 * 
 	 * @return \mstate\assertions\AssertionChain
 	 */
 	public function __construct($value) {
-
-		if (!is_scalar($value)) {
-			throw new \Exception('Value should be scalar');
-		}
-
 		$this->value = $value;
-		
 		return $this;
+	}
+
+	/**
+	 * @param mixed $value A scalar value to evaluate
+	 *
+	 * @throws \Exception If the value is non-scalar
+	 * 
+	 * @return AssertionChain
+	 */
+	public static function factory($value) {
+		return new self($value);
 	}
 
 	/**

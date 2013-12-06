@@ -5,6 +5,17 @@ use mstate\assertions\AssertionList;
 
 class AssertionListTest extends PHPUnit_Framework_TestCase {
 
+	/**
+	 * @expectedException InvalidArgumentException
+	 */
+	public function testNonChainConstructorItem() {
+		$chains = [
+			new AssertionChain('zed'),
+			new DateTime()
+		];
+		
+		new AssertionList($chains);
+	}
 
 	public function testConstructor() {
 

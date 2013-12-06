@@ -3,6 +3,13 @@
 use mstate\assertions\AssertionChain;
 
 class AssertionChainTest extends PHPUnit_Framework_TestCase {
+	
+	/**
+	 * @expectedException \Exception
+	 */
+	public function testNonScalar() {
+		new AssertionChain(new DateTime());
+	}
 
 	/**
 	 * @expectedException \BadMethodCallException

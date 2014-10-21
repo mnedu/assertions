@@ -20,14 +20,6 @@ class AssertionList implements ValidatableInterface {
 
 				$this->addChain($chain);
 
-				if ($chain->valid()) {
-					continue;
-				}
-
-				$this->violations = array_merge(
-					$chain->validationErrors(),
-					$this->violations
-				);
 				
 			}
 		}
@@ -56,10 +48,27 @@ class AssertionList implements ValidatableInterface {
 		return $this->violations;
 	}
 
+    /**
+     * Add a chain to the list of assertions - this will also call valid() on the chain.
+     *
+     * @param AssertionChain
+     *
+     * @return NULL
+     */
 	public function addChain(AssertionChain $c) {
 		$this->chains->attach($c);
-	}
 
+        if ($c->valid()) {
+            return;
+        }
+
+        $this->violations = array_merge(
+            $c->validationErrors(),
+            $this->violations
+        );
+
+        return;
+	}
 
 	public function removeChain(AssertionChain $c) {
 		$this->chains->detach($c);
